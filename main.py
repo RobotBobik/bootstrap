@@ -1,20 +1,26 @@
-from aiogram import Bot, Dispatcher, types
 import asyncio
 import os
+from aiogram import Bot, Dispatcher, types
+from aiogram.types import Message
+from aiogram import F
+from aiogram.fsm.storage.memory import MemoryStorage
 
-TOKEN = os.getenv("TELEGRAM_TOKEN")
+# ⏳ URL на countdown
 RELEASE_URL = "https://www.tickcounter.com/countdown/7230262/my-countdown"
 
-router = Router()
+# 🪪 Токен бота
+TOKEN = os.getenv("TELEGRAM_TOKEN")
 
-@router.message(commands=["start", "реліз", "release"])
-async def send_release(message: types.Message):
+# 🔧 Ініціалізація
+bot = Bot(token=TOKEN)
+dp = Dispatcher(storage=MemoryStorage())
+
+@dp.message(F.text.in_({"start", "/start", "release", "/release", "реліз"}))
+async def send_release(message: Message):
     await message.answer(
-        f"🚀 Реліз PricePulsarium вже скоро!\n\n"
+        f"🚀 Реліз PricePulsarium вже скоро!\n"
         f"Слідкуй за таймером тут: {RELEASE_URL}"
     )
-
-dp.include_router(router)
 
 async def main():
     await bot.delete_webhook(drop_pending_updates=True)

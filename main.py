@@ -6,7 +6,7 @@ TOKEN = os.getenv("TELEGRAM_TOKEN")
 RELEASE_URL = "https://www.tickcounter.com/countdown/7230262/my-countdown"
 
 bot = Bot(token=TOKEN)
-dp = Dispatcher(bot)
+dp = Dispatcher() 
 
 @dp.message_handler(commands=["start", "реліз", "release"])
 async def send_release(message: types.Message):

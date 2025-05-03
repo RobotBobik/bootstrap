@@ -5,16 +5,20 @@ import os
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 RELEASE_URL = "https://www.tickcounter.com/countdown/7230262/my-countdown"
 
-bot = Bot(token=TOKEN)
-dp = Dispatcher() 
+router = Router()
 
-@dp.message_handler(commands=["start", "реліз", "release"])
+@router.message(commands=["start", "реліз", "release"])
 async def send_release(message: types.Message):
     await message.answer(
         f"🚀 Реліз PricePulsarium вже скоро!\n\n"
         f"Слідкуй за таймером тут: {RELEASE_URL}"
     )
 
+dp.include_router(router)
+
+async def main():
+    await bot.delete_webhook(drop_pending_updates=True)
+    await dp.start_polling(bot)
+
 if __name__ == "__main__":
-    from aiogram import executor
-    executor.start_polling(dp)
+    asyncio.run(main())
